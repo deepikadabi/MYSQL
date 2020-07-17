@@ -1,0 +1,188 @@
+-- To create database
+create database Airline;
+
+-- TO use data base which we have created 
+use Airline;
+
+-- To see tables
+show tables;
+
+-- To create the tables
+create table Flights(
+   
+	FlightID varchar(20) NOT NULL,
+	FlightDate varchar(20) NOT NULL,
+	FlightJetID varchar(10) NOT NULL,
+	FlightDestination varchar(10) NOT NULL,
+	FlightSource varchar(20) NOT NULL,
+	FlightTime varchar(10) NOT NULL,
+	RunwayID varchar(20) NOT NULL,
+	ReservedBy varchar(20) NOT NULL,
+	PRIMARY KEY (FlightID)
+
+);
+
+
+create table Tickets(
+   
+	TicketID varchar(20) NOT NULL,
+	TicketType varchar(20),
+	PassengerID varchar(10) NOT NULL,
+	TicketAmount int(20) NOT NULL,
+	FlightID varchar(20) NOT NULL,
+	PRIMARY KEY (TicketID)
+);
+
+
+create table Passenger(
+
+	PassengerID varchar(50) NOT NULL,
+	PassengerName varchar(20) NOT NULL,
+	PassengerNumber int(20) NOT NULL,
+	PassengerIdentity varchar(50) NOT NULL,
+	PRIMARY KEY (PassengerID)
+
+);
+
+create table Jets(
+	
+	JetID varchar(10) NOT NULL,
+	JetName varchar(10) NOT NULL,
+	JetType varchar(10) NOT NULL,
+	PRIMARY KEY (JetID)
+
+);
+
+create table Staff(
+
+	StaffMemberID varchar(10) NOT NULL,
+	StaffMemberName varchar(20) NOT NULL,
+	StaffMemberDesignation varchar(10) NOT NULL,
+	StaffMemberContact varchar(20) NOT NULL,
+	PRIMARY KEY (StaffMemberID)
+);
+
+create table Runways(
+
+   RunwayID varchar(10) NOT NULL,
+   RunwayTrack int(10),
+   RunwayTowerAssign int(10),
+   PRIMARY KEY (RunwayID)
+);
+
+
+create table Announcements(
+
+	AnnouncementID varchar(20) NOT NULL,
+	AnnouncementText varchar(20) NOT NULL,
+	AnnouncementStartDate varchar(20) NOT NULL,
+	AnnouncementExpDate varchar(20) NOT NULL,
+	StaffMemberID varchar(20),
+	PRIMARY KEY (AnnouncementID)
+);
+
+-- ALTER table with Parent table
+
+ALTER TABLE Tickets ADD CONSTRAINT fk_flightid FOREIGN KEY (FlightID) REFERENCES Flights (FlightID);
+
+ALTER TABLE Tickets ADD CONSTRAINT fk_passengerid FOREIGN KEY (PassengerID) REFERENCES Passenger (PassengerID);
+
+ALTER TABLE Flights ADD CONSTRAINT fk_jetid FOREIGN KEY (FlightJetID) REFERENCES Jets (JetID);
+
+ALTER TABLE Flights ADD CONSTRAINT fk_runwayid FOREIGN KEY (RunwayID) REFERENCES Runways (RunwayID);
+
+ALTER TABLE Flights ADD CONSTRAINT fk_staffmemberid FOREIGN KEY (ReservedBy) REFERENCES Staff (StaffMemberID);
+
+ALTER TABLE Announcements ADD CONSTRAINT fk_announceid FOREIGN KEY (StaffMemberID) REFERENCES Staff (StaffMemberID);
+ALTER TABLE Staff ADD COLUMN Gender enum('M', 'F', 'T');
+
+-- Inserting data in Tables
+
+INSERT INTO Staff Values('SM001', 'Neha Sen' , 'Manager', '8881923463', 'F');
+INSERT INTO Staff Values('SM002', 'Anushika Coudhary' , 'Crew', '8591923463', 'F');
+INSERT INTO Staff Values('SM003', 'Aman Shir','Director', '8881923463', 'M');
+
+INSERT INTO Announcements Values('AD001', 'WAITING', '2020/02/05', '2020/02/06','SM001');
+INSERT INTO Announcements Values('AD002', 'ON WAY', '2020/03/05', '2020/03/06','SM001');
+INSERT INTO Announcements Values('AD003', 'LANDING', '2020/04/05', '2020/04/06','SM003');
+INSERT INTO Announcements Values('AD004', 'TAKE OFF', '2020/05/05', '2020/05/06','SM002');
+INSERT INTO Announcements Values('AD005', 'READY', '2020/06/05', '2020/06/06','SM002');
+INSERT INTO Announcements Values('AD006', 'HOLDING', '2020/07/05', '2020/07/06','SM002');
+
+INSERT INTO Jets Value('J001', 'IndiGo', 'Private');
+INSERT INTO Jets Value('J002', 'Vistara', 'Govt.');
+INSERT INTO Jets Value('J003', 'Spice', 'Private');
+INSERT INTO Jets Value('J004', 'Raptar', 'Govt.');
+INSERT INTO Jets Value('J005', 'Qatar', 'Private');
+
+INSERT INTO Tickets Value('TI001', 'Forign', 'P001', '2500', 'F001');
+INSERT INTO Tickets Value('TI002', 'India', 'P002', '2560','F002');
+INSERT INTO Tickets Value('TI003', 'Dubai', 'P003','3000', 'F003');
+INSERT INTO Tickets Value('TI004', 'UK', 'P004','2000', 'F004');
+INSERT INTO Tickets Value('TI005', 'US', 'P005','5000', 'F005');
+INSERT INTO Tickets Value('TI006', 'India', 'P006','4380', 'F006');
+
+INSERT INTO Passenger Value('P001', 'Chetan Rathore', '969797','ESFPD1432A');
+INSERT INTO Passenger Value('P002', 'Deepika Dabi', '978974','ESFBA575G');
+INSERT INTO Passenger Value('P003', 'Jaya Choudhary', '989873','ESBHW4587W');
+INSERT INTO Passenger Value('P004', 'Divya Sharma', '9668230', 'ESHHR4667G');
+INSERT INTO Passenger Value('P005', 'Veenit rathore', '955852','EGRFG675D');
+INSERT INTO Passenger Value('P006', 'Sakshi Dabi', '248027','EYFG755R');
+
+INSERT INTO Runways Value('R001', '1','6') ;
+INSERT INTO Runways Value('R002', '2','3') ;
+INSERT INTO Runways Value('R003', '3','2') ;
+INSERT INTO Runways Value('R004', '4','3') ;
+INSERT INTO Runways Value('R005', '5','1') ;
+
+INSERT INTO Flights Value('F001', '2020/04/05','J001', 'Mumbai', 'Delhi', '12:30', 'R001', 'S001');
+INSERT INTO Flights Value('F002', '2020/04/06','J002', 'Indore', 'Mumbai', '11:00', 'R002', 'S002');
+INSERT INTO Flights Value('F003', '2020/04/08','J003', 'Delhi', 'Banglore', '18:20', 'R003', 'S003');
+INSERT INTO Flights Value('F004', '2020/02/24','J001', 'Lacknow', 'Bangladesh', '20:00', 'R004', 'S004');
+INSERT INTO Flights Value('F005', '2020/03/28','J005', 'Sangali', 'Delhi', '19:00', 'R005', 'S005');
+INSERT INTO Flights Value('F007', '2021/04/25','J006', 'UK', 'Pune', '13:00', 'R006', 'S006');
+INSERT INTO Flights Value('F008', '2019/06/07','J001', 'Australlia', 'Dubai', '12:00', 'R004', 'S003');
+INSERT INTO Flights Value('F009', '2020/12/25','J002', 'Ahmdabad', 'UK', '13:00', 'R003', 'S006');
+INSERT INTO Flights Value('F010', '2020/11/18','J005', 'Chennai', 'London', '23:00', 'R005', 'S002');
+INSERT INTO Flights Value('F011', '2020/10/23','J006', 'Indore', 'Paris', '13:50', 'R003', 'S004');
+INSERT INTO Flights Value('F012', '2020/07/20','J004', 'Gujrat', 'Kocchi', '11:20', 'R002', 'S004');
+INSERT INTO Flights Value('F013', '2020/03/02','J003', 'Mumbai', 'Panducheri', '11:20', 'R001', 'S005');
+INSERT INTO Flights Value('F014', '2020/07/14','J003', 'Pune', 'Mumbai', '09:00', 'R006', 'S003');
+INSERT INTO Flights Value('F015', '2020/03/23','J002', 'Bangladesh', 'Pune', '08:00', 'R005', 'S004');
+
+
+show databases;
+use Airline;
+
+show tables;
+
+select Flights.FlightID, TicketID , concat(Flightsource,' ', Flightdestination) as route from Flights left join Tickets on Flights.Flightid = Tickets.Flightid;
+
+
+select Flights.Flightid, concat(Flightsource, ' ', Flightdestination), TicketID, Passenger.PassengerID, PassengerName 
+	from Tickets right join Flights 
+		on Flights.FlightID = Tickets.FlightID 
+			left join Passenger 
+				on Passenger.PassengerID = Tickets.PassengerID 
+union
+select Flights.FlightID, concat(Flightsource, ' ', Flightdestination), TicketID, Passenger.PassengerID, PassengerName 
+	from Tickets right join Flights 
+		on Flights.FlightID = Tickets.FlightID 
+			right join Passenger 
+				on Passenger.PassengerID = Tickets.PassengerID;
+
+
+
+
+
+select Flights.FlightID, concat(FlightSource, ' ', FlightDestination), TicketID, Passenger.PassengerID, PassengerName 
+	from Tickets right join Flights 
+		on Flights.FlightID = Tickets.FlightID 
+			left join Passenger 
+				on Passenger.PassengerID = Tickets.PassengerID 
+union
+select Flights.FlightID, concat(FlightSource, ' ', FlightDestination), TicketID, Passenger.PassengerID, PassengerName 
+	from Tickets right join Flights 
+		on Flights.FlightID = Tickets.FlightID 
+			right join Passenger 
+				on Passenger.PassengerID = Tickets.PassengerID;
